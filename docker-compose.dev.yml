@@ -5,16 +5,44 @@ services:
       - 5672:5672
 
   config:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
     build: config
     ports:
       - 8888:8888
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   auth-service:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+      NOTIFICATION_SERVICE_PASSWORD: $NOTIFICATION_SERVICE_PASSWORD
+      STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
+      ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
+      MONGODB_PASSWORD: $MONGODB_PASSWORD
     build: auth-service
     ports:
       - 5000:5000
+    restart: always
+    depends_on:
+      config:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   auth-mongodb:
     build: mongodb
     ports:
       - 25000:27017
+    environment:
+      MONGODB_PASSWORD: $MONGODB_PASSWORD
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
