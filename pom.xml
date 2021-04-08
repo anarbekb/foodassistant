@@ -36,6 +36,7 @@
     <modules>
         <module>config</module>
         <module>auth-service</module>
+        <module>registry</module>
     </modules>
 
 </project>
