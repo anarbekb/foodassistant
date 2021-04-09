@@ -1,0 +1,1 @@
+Service for store server naming with Eureka Naming Server
